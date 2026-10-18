@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Afiş - Dijital Yaşam Risk Değerlendirmesi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --primary-light: #e0f2fe;
+      --accent: #6366f1;
+      --accent-glow: #818cf8;
+      --dark: #0f172a;
+      --gray-900: #0f172a;
+      --gray-800: #1e293b;
+      --gray-600: #475569;
+      --gray-100: #f1f5f9;
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #e2e8f0;
+      color: var(--dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 0;
+    }
+
+    /* Print toolbar */
+    .toolbar {
+      width: 210mm;
+      max-width: 95vw;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      padding: 12px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+    .toolbar-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--gray-800);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toolbar-title span {
+      background: #dbeafe;
+      color: #1d4ed8;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+    }
+    .print-btn {
+      background: linear-gradient(135deg, #0284c7, #4f46e5);
+      color: white;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .print-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+    }
+
+    /* Poster Page Canvas: Exact A4 */
+    .poster-page {
+      width: 210mm;
+      height: 297mm;
+      background: #ffffff;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      border-radius: 2px;
+    }
+
+    /* Decorative Background Gradients */
+    .bg-circle-1 {
+      position: absolute;
+      top: -120px;
+      right: -100px;
+      width: 480px;
+      height: 480px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(99,102,241,0.14) 0%, rgba(2,132,199,0.08) 50%, transparent 70%);
+      pointer-events: none;
+    }
+    .bg-circle-2 {
+      position: absolute;
+      bottom: -150px;
+      left: -120px;
+      width: 520px;
+      height: 520px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(2,132,199,0.12) 0%, rgba(99,102,241,0.06) 50%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Header */
+    .poster-header {
+      padding: 38px 46px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, rgba(2,132,199,0.1), rgba(99,102,241,0.12));
+      border: 1px solid rgba(2,132,199,0.25);
+      color: #0369a1;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 100px;
+    }
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #0284c7;
+    }
+    .header-tag {
+      font-size: 13px;
+      font-weight: 700;
+      color: #64748b;
+      letter-spacing: 1px;
+    }
+
+    /* Main Hero Area */
+    .poster-hero {
+      padding: 10px 46px 24px;
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+    .hero-pretitle {
+      font-size: 15px;
+      font-weight: 700;
+      color: #6366f1;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .hero-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 40px;
+      font-weight: 900;
+      line-height: 1.15;
+      color: var(--dark);
+      letter-spacing: -1px;
+      margin-bottom: 14px;
+    }
+    .hero-title .highlight {
+      background: linear-gradient(135deg, #0284c7 0%, #6366f1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-subtitle {
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--gray-600);
+      max-width: 580px;
+      margin: 0 auto;
+    }
+
+    /* 3 Alarm / Question Cards */
+    .cards-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      padding: 0 46px;
+      position: relative;
+      z-index: 2;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 18px 16px;
+      text-align: center;
+      position: relative;
+      transition: all 0.2s;
+    }
+    .stat-icon {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 10px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #e0f2fe, #e0e7ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+    .stat-title {
+      font-weight: 800;
+      font-size: 14px;
+      color: var(--gray-900);
+      margin-bottom: 4px;
+    }
+    .stat-desc {
+      font-size: 12px;
+      color: var(--gray-600);
+      line-height: 1.4;
+    }
+
+    /* Central Big Callout (The Test Showcase) */
+    .test-box {
+      margin: 0 46px;
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      border-radius: 24px;
+      padding: 26px 32px;
+      color: white;
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 24px;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 16px 36px rgba(15, 23, 42, 0.25);
+    }
+    .test-box-left h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      line-height: 1.25;
+    }
+    .test-box-left h3 span {
+      color: #38bdf8;
+    }
+    .test-box-left p {
+      font-size: 13px;
+      color: #cbd5e1;
+      line-height: 1.55;
+      margin-bottom: 16px;
+    }
+    .test-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .test-features li {
+      font-size: 12px;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .check-icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #10b981;
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    /* QR Code Container inside the box */
+    .qr-container {
+      background: white;
+      border-radius: 18px;
+      padding: 16px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .qr-image {
+      width: 145px;
+      height: 145px;
+      object-fit: contain;
+      image-rendering: pixelated;
+      margin-bottom: 8px;
+    }
+    .qr-scan-label {
+      font-weight: 800;
+      font-size: 12px;
+      color: #0f172a;
+      letter-spacing: 0.3px;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .qr-url {
+      font-size: 10px;
+      font-weight: 700;
+      color: #0284c7;
+      word-break: break-all;
+    }
+
+    /* 4 Evaluation Pillars */
+    .pillars-section {
+      padding: 22px 46px 14px;
+      position: relative;
+      z-index: 2;
+    }
+    .pillars-header {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #64748b;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .pillar-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px 12px;
+      text-align: center;
+    }
+    .pillar-item strong {
+      display: block;
+      font-size: 13px;
+      color: var(--dark);
+      margin-bottom: 2px;
+    }
+    .pillar-item span {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    /* Poster Footer */
+    .poster-footer {
+      margin-top: auto;
+      background: #f1f5f9;
+      border-top: 1px solid #e2e8f0;
+      padding: 14px 46px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: #64748b;
+      position: relative;
+      z-index: 2;
+    }
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .shield-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #e2e8f0;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+      color: #334155;
+    }
+    .footer-right {
+      font-weight: 600;
+    }
+
+    /* Print settings */
+    @media print {
+      body {
+        background: transparent;
+        padding: 0;
+      }
+      .toolbar {
+        display: none !important;
+      }
+      .poster-page {
+        box-shadow: none;
+        border-radius: 0;
+        width: 210mm;
+        height: 297mm;
+        margin: 0;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+      }
+      @page {
+        size: A4 portrait;
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Print Toolbar (Only visible on screen) -->
+  <div class="toolbar">
+    <div class="toolbar-title">
+      <span>AFİŞ / ROLL-UP / POSTER</span>
+      Dijital Yaşam Risk Değerlendirmesi (A4 Baskıya Hazır)
+    </div>
+    <button class="print-btn" onclick="window.print()">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+      Hemen Yazdır / PDF İndir (Ctrl + P)
+    </button>
+  </div>
+
+  <!-- A4 Canvas (210mm x 297mm) -->
+  <div class="poster-page">
+    <div class="bg-circle-1"></div>
+    <div class="bg-circle-2"></div>
+
+    <!-- Header -->
+    <div class="poster-header">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        Sağlık & Teknoloji Farkındalığı
+      </div>
+      <div class="header-tag">30 SANİYELİK ÜCRETSİZ TEST</div>
+    </div>
+
+    <!-- Hero Title -->
+    <div class="poster-hero">
+      <div class="hero-pretitle">Dijital Alışkanlıklarınız Sağlığınızı Nasıl Etkiliyor?</div>
+      <h1 class="hero-title">
+        Dijital Yaşam<br>
+        <span class="highlight">Risk Puanınızı</span> Öğrenin
+      </h1>
+      <p class="hero-subtitle">
+        Günde kaç saat ekrana bakıyorsunuz? Uykunuz ve odaklanma gücünüz dengede mi? 
+        8 soruda bilimsel temelli dijital sağlık karnenizi çıkarın.
+      </p>
+    </div>
+
+    <!-- 3 Questions / Alarms -->
+    <div class="cards-row">
+      <div class="stat-card">
+        <div class="stat-icon">📱</div>
+        <div class="stat-title">Telefon Bağımlılığı</div>
+        <div class="stat-desc">Uyandıktan sonraki ilk 10 dakikada telefona mı sarılıyorsunuz?</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🌙</div>
+        <div class="stat-title">Uyku Kalitesi</div>
+        <div class="stat-desc">Gece yatakta mavi ışığa maruz kalarak uyku düzeninizi bozuyor musunuz?</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-title">Sürekli Bildirimler</div>
+        <div class="stat-desc">Günde 100+ bildirim ile dikkat dağınıklığı ve stres mi yaşıyorsunuz?</div>
+      </div>
+    </div>
+
+    <!-- Big Center Callout Box with QR -->
+    <div class="test-box">
+      <div class="test-box-left">
+        <h3>Kameranızı Açın &amp;<br><span>30 Saniyede Testi Çözün</span></h3>
+        <p>Hiçbir uygulama indirmeden, üyelik gerektirmeden tarayıcınız üzerinden anında kişisel analiz ve öneriler alın.</p>
+        
+        <ul class="test-features">
+          <li><span class="check-icon">✓</span> <strong>10 Üzerinden Puan:</strong> Anında risk seviyesi analizi</li>
+          <li><span class="check-icon">✓</span> <strong>Kişisel Öneriler:</strong> Alışkanlıklarınıza özel iyileştirme adımları</li>
+          <li><span class="check-icon">✓</span> <strong>%100 Gizli &amp; Ücretsiz:</strong> Hiçbir veriniz kaydedilmez</li>
+        </ul>
+      </div>
+
+      <div class="qr-container">
+        <img src="dijitalsaglik-qr.png" alt="Dijital Sağlık Testi QR Kodu" class="qr-image">
+        <div class="qr-scan-label">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>
+          KAMERAYLA OKUTUN
+        </div>
+        <div class="qr-url">dijitalsaglik.netlify.app</div>
+      </div>
+    </div>
+
+    <!-- 4 Evaluation Pillars -->
+    <div class="pillars-section">
+      <div class="pillars-header">Neleri Ölçüyoruz?</div>
+      <div class="pillars-grid">
+        <div class="pillar-item">
+          <strong>Ekran Süresi</strong>
+          <span>Telefon &amp; PC dengesi</span>
+        </div>
+        <div class="pillar-item">
+          <strong>Uyku Hijyeni</strong>
+          <span>Yatak öncesi mavi ışık</span>
+        </div>
+        <div class="pillar-item">
+          <strong>Sosyal Medya</strong>
+          <span>Zihinsel yorgunluk &amp; FOMO</span>
+        </div>
+        <div class="pillar-item">
+          <strong>Dijital Detoks</strong>
+          <span>Mola &amp; bildirim yönetimi</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="poster-footer">
+      <div class="footer-left">
+        <span class="shield-badge">🔒 Gizlilik Öncelikli</span>
+        <span>Tüm hesaplamalar cihazınızda yapılır, sunucuya hiçbir bilgi iletilmez.</span>
+      </div>
+      <div class="footer-right">
+        dijitalsaglik.netlify.app
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

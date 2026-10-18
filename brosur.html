@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Broşürü - Dijital Yaşam ve Sağlık Rehberi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --accent: #6366f1;
+      --dark: #0f172a;
+      --gray-900: #0f172a;
+      --gray-800: #1e293b;
+      --gray-700: #334155;
+      --gray-600: #475569;
+      --gray-500: #64748b;
+      --gray-100: #f1f5f9;
+      --gray-50: #f8fafc;
+      --border: #e2e8f0;
+      --emerald: #059669;
+      --emerald-bg: #ecfdf5;
+      --amber: #d97706;
+      --rose: #e11d48;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #cbd5e1;
+      color: var(--dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 0 60px;
+    }
+
+    /* Print toolbar */
+    .toolbar {
+      width: 210mm;
+      max-width: 95vw;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      padding: 12px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+    .toolbar-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--gray-800);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toolbar-title span {
+      background: #e0e7ff;
+      color: #4338ca;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+    }
+    .print-btn {
+      background: linear-gradient(135deg, #0284c7, #4f46e5);
+      color: white;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .print-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+    }
+
+    /* Brochure Page Canvas: A4 Exact */
+    .brochure-page {
+      width: 210mm;
+      height: 297mm;
+      background: #ffffff;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.18);
+      border-radius: 2px;
+      margin-bottom: 30px;
+    }
+
+    /* Page Label on Screen */
+    .page-indicator {
+      position: absolute;
+      top: 14px;
+      right: 20px;
+      background: rgba(15, 23, 42, 0.08);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--gray-600);
+      padding: 3px 8px;
+      border-radius: 4px;
+      z-index: 10;
+    }
+
+    /* ================================= PAGE 1 (ÖN YÜZ) ================================= */
+    .cover-top-stripe {
+      height: 8px;
+      background: linear-gradient(90deg, #0284c7, #6366f1, #38bdf8);
+    }
+
+    .cover-header {
+      padding: 32px 42px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #0284c7, #6366f1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+    }
+    .logo-text {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      color: var(--dark);
+      letter-spacing: -0.5px;
+    }
+    .cover-badge {
+      font-size: 11px;
+      font-weight: 700;
+      color: #0369a1;
+      background: #e0f2fe;
+      border: 1px solid #bae6fd;
+      padding: 5px 12px;
+      border-radius: 100px;
+    }
+
+    .cover-hero {
+      padding: 16px 42px 20px;
+    }
+    .cover-kicker {
+      font-size: 13px;
+      font-weight: 800;
+      color: #6366f1;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .cover-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 34px;
+      font-weight: 900;
+      line-height: 1.18;
+      color: var(--dark);
+      letter-spacing: -0.5px;
+      margin-bottom: 12px;
+    }
+    .cover-title span {
+      color: #0284c7;
+    }
+    .cover-desc {
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: var(--gray-600);
+      max-width: 620px;
+    }
+
+    /* 3 Alarm Boxes */
+    .alarm-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding: 0 42px 22px;
+    }
+    .alarm-card {
+      background: var(--gray-50);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 14px;
+    }
+    .alarm-card-num {
+      font-family: 'Outfit', sans-serif;
+      font-size: 26px;
+      font-weight: 900;
+      color: #0284c7;
+      margin-bottom: 4px;
+    }
+    .alarm-card-title {
+      font-weight: 800;
+      font-size: 13px;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+    .alarm-card-text {
+      font-size: 11.5px;
+      line-height: 1.45;
+      color: var(--gray-600);
+    }
+
+    /* Large Action Banner on Cover */
+    .cta-banner {
+      margin: 0 42px;
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      border-radius: 20px;
+      padding: 24px 28px;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 20px;
+      align-items: center;
+      color: white;
+    }
+    .cta-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+    .cta-title span {
+      color: #38bdf8;
+    }
+    .cta-p {
+      font-size: 12.5px;
+      color: #cbd5e1;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+    .cta-steps {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .cta-steps li {
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #f1f5f9;
+    }
+    .step-badge {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #38bdf8;
+      color: #0f172a;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .cta-qr-box {
+      background: white;
+      border-radius: 16px;
+      padding: 14px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .cta-qr-img {
+      width: 135px;
+      height: 135px;
+      object-fit: contain;
+      margin-bottom: 6px;
+    }
+    .cta-qr-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--dark);
+      letter-spacing: 0.5px;
+    }
+    .cta-qr-sub {
+      font-size: 9.5px;
+      color: #0284c7;
+      font-weight: 700;
+    }
+
+    /* Score Scale Showcase on Cover */
+    .scale-showcase {
+      padding: 22px 42px 14px;
+    }
+    .scale-header {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .scale-boxes {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .scale-item {
+      padding: 10px 12px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    .scale-item.good {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      color: #065f46;
+    }
+    .scale-item.mid {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      color: #92400e;
+    }
+    .scale-item.high {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+    }
+    .scale-item strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 2px;
+      font-weight: 800;
+    }
+    .scale-item span {
+      font-size: 11px;
+      opacity: 0.85;
+    }
+
+    .cover-footer {
+      margin-top: auto;
+      background: var(--gray-50);
+      border-top: 1px solid var(--border);
+      padding: 12px 42px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--gray-500);
+    }
+
+    /* ================================= PAGE 2 (ARKA YÜZ) ================================= */
+    .guide-header {
+      padding: 34px 42px 18px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    }
+    .guide-header-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+    .guide-header-title span {
+      color: #0284c7;
+    }
+    .guide-header-subtitle {
+      font-size: 13px;
+      color: var(--gray-600);
+    }
+
+    /* 5 Golden Rules Grid */
+    .rules-list {
+      padding: 18px 42px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .rule-card {
+      display: grid;
+      grid-template-columns: 46px 1fr;
+      gap: 14px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 16px;
+      align-items: center;
+    }
+    .rule-num {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #0284c7, #6366f1);
+      color: white;
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .rule-info strong {
+      display: block;
+      font-size: 13.5px;
+      color: var(--dark);
+      margin-bottom: 3px;
+    }
+    .rule-info p {
+      font-size: 11.5px;
+      color: var(--gray-600);
+      line-height: 1.45;
+    }
+
+    /* Bottom Info & Re-Scan Box on Page 2 */
+    .guide-bottom-box {
+      margin: 6px 42px 14px;
+      background: #e0f2fe;
+      border: 1.5px dashed #0284c7;
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+    .bottom-box-text h4 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      color: #0369a1;
+      margin-bottom: 4px;
+    }
+    .bottom-box-text p {
+      font-size: 11.5px;
+      color: #0c4a6e;
+      line-height: 1.45;
+    }
+    .mini-qr {
+      width: 68px;
+      height: 68px;
+      background: white;
+      padding: 4px;
+      border-radius: 8px;
+      flex-shrink: 0;
+      border: 1px solid #bae6fd;
+    }
+    .mini-qr img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* Print styles */
+    @media print {
+      body {
+        background: transparent;
+        padding: 0;
+      }
+      .toolbar {
+        display: none !important;
+      }
+      .page-indicator {
+        display: none !important;
+      }
+      .brochure-page {
+        box-shadow: none;
+        border-radius: 0;
+        width: 210mm;
+        height: 297mm;
+        margin: 0;
+        page-break-after: always;
+        page-break-inside: avoid;
+      }
+      .brochure-page:last-child {
+        page-break-after: avoid;
+      }
+      @page {
+        size: A4 portrait;
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Print Toolbar (Only visible on screen) -->
+  <div class="toolbar">
+    <div class="toolbar-title">
+      <span>EL BROŞÜRÜ / BİLGİLENDİRME REHBERİ</span>
+      Ön &amp; Arka 2 Sayfa A4 (Çift Taraflı Baskıya Hazır)
+    </div>
+    <button class="print-btn" onclick="window.print()">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+      Broşürü Yazdır / PDF İndir (Ctrl + P)
+    </button>
+  </div>
+
+  <!-- ==================== SAYFA 1: ÖN YÜZ ==================== -->
+  <div class="brochure-page">
+    <div class="page-indicator">SAYFA 1 — ÖN YÜZ</div>
+    <div class="cover-top-stripe"></div>
+
+    <!-- Header -->
+    <div class="cover-header">
+      <div class="logo-area">
+        <div class="logo-icon">🌐</div>
+        <div class="logo-text">Dijital Sağlık</div>
+      </div>
+      <div class="cover-badge">Kişisel Sağlık Testi</div>
+    </div>
+
+    <!-- Hero -->
+    <div class="cover-hero">
+      <div class="cover-kicker">30 Saniyede Öz-Değerlendirme</div>
+      <h1 class="cover-title">
+        Dijital Hayatınız<br>
+        <span>Kontrolünüz Altında mı?</span>
+      </h1>
+      <p class="cover-desc">
+        Sürekli telefonunuza bakma ihtiyacı mı duyuyorsunuz? Uykusuzluk, dikkat eksikliği ve tükenmişlik hissi 
+        dijital alışkanlıklarınızdan kaynaklanıyor olabilir. 8 soruluk bilimsel testimizle riskinizi ölçün.
+      </p>
+    </div>
+
+    <!-- 3 Alarms -->
+    <div class="alarm-grid">
+      <div class="alarm-card">
+        <div class="alarm-card-num">6.5s</div>
+        <div class="alarm-card-title">Ortalama Ekran Süresi</div>
+        <div class="alarm-card-text">Günde 4 saatin üzerindeki telefon kullanımı dikkat dağınıklığını %60 artırır.</div>
+      </div>
+      <div class="alarm-card">
+        <div class="alarm-card-num">%78</div>
+        <div class="alarm-card-title">Gece Mavi Işık</div>
+        <div class="alarm-card-text">Uykudan hemen önce ekrana bakmak melatonin salgısını durdurur.</div>
+      </div>
+      <div class="alarm-card">
+        <div class="alarm-card-num">150+</div>
+        <div class="alarm-card-title">Günlük Bildirim</div>
+        <div class="alarm-card-text">Her bildirim beyninizi tetikler ve odaklanma sürenizi parçalar.</div>
+      </div>
+    </div>
+
+    <!-- Big Action Banner with QR -->
+    <div class="cta-banner">
+      <div>
+        <h3 class="cta-title">Kameranızı Açın,<br><span>Puanınızı Hemen Görün</span></h3>
+        <p class="cta-p">Üyelik veya uygulama yükleme yok. Tamamen ücretsiz ve gizli.</p>
+        <ul class="cta-steps">
+          <li><span class="step-badge">1</span> Telefon kamerasını QR koda tutun</li>
+          <li><span class="step-badge">2</span> 8 kısa soruya günlük rutinlerinizi girin</li>
+          <li><span class="step-badge">3</span> 10 üzerinden puanınızı ve önerilerinizi alın</li>
+        </ul>
+      </div>
+
+      <div class="cta-qr-box">
+        <img src="dijitalsaglik-qr.png" alt="Test QR Kodu" class="cta-qr-img">
+        <div class="cta-qr-tag">KAMERAYLA TARA</div>
+        <div class="cta-qr-sub">dijitalsaglik.netlify.app</div>
+      </div>
+    </div>
+
+    <!-- Scale Showcase -->
+    <div class="scale-showcase">
+      <div class="scale-header">Puanlama ve Risk Skalası</div>
+      <div class="scale-boxes">
+        <div class="scale-item good">
+          <strong>7.5 – 10 PUAN</strong>
+          <span>Düşük Risk (Dengeli)</span>
+        </div>
+        <div class="scale-item mid">
+          <strong>5.0 – 7.4 PUAN</strong>
+          <span>Orta Risk (Dikkat)</span>
+        </div>
+        <div class="scale-item high">
+          <strong>0 – 4.9 PUAN</strong>
+          <span>Yüksek Risk (Aksiyon Gerekli)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="cover-footer">
+      <span>🔒 Hiçbir kişisel veri kaydedilmez veya paylaşılmaz.</span>
+      <span>dijitalsaglik.netlify.app</span>
+    </div>
+  </div>
+
+  <!-- ==================== SAYFA 2: ARKA YÜZ (REHBER) ==================== -->
+  <div class="brochure-page">
+    <div class="page-indicator">SAYFA 2 — ARKA YÜZ</div>
+    <div class="cover-top-stripe"></div>
+
+    <!-- Header -->
+    <div class="guide-header">
+      <div class="guide-header-title">Daha Sağlıklı Dijital Yaşam İçin <span>5 Altın Kural</span></div>
+      <div class="guide-header-subtitle">Uzmanların önerdiği basit ama etkili dijital detoks ve denge stratejileri</div>
+    </div>
+
+    <!-- 5 Rules -->
+    <div class="rules-list">
+      <div class="rule-card">
+        <div class="rule-num">1</div>
+        <div class="rule-info">
+          <strong>20-20-20 Göz Kuralını Uygulayın</strong>
+          <p>Her 20 dakikada bir, en az 20 saniye boyunca 20 fit (yaklaşık 6 metre) uzağa bakın. Göz kuruluğunu ve baş ağrısını anında azaltır.</p>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-num">2</div>
+        <div class="rule-info">
+          <strong>Yatak Odasını "Ekransız Bölge" İlan Edin</strong>
+          <p>Uyumadan en az 30-45 dakika önce telefon ve tabletleri bırakın. Sabah uyanır uyanmaz ilk 15 dakika sosyal medyaya girmeyin.</p>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-num">3</div>
+        <div class="rule-info">
+          <strong>Gereksiz Bildirimleri Kapatın</strong>
+          <p>WhatsApp ve e-posta dışındaki tüm sosyal medya ve alışveriş bildirimlerini sessize alın. Ekranın sizi değil, sizin ekranı yönettiğinizi hissedin.</p>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-num">4</div>
+        <div class="rule-info">
+          <strong>Haftada Bir Yarım Gün "Dijital Mola" Verin</strong>
+          <p>Hafta sonları en az 4-5 saat telefonunuzu çekmeceye koyun ve doğa yürüyüşü, kitap okuma veya sevdiklerinizle sohbete odaklanın.</p>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-num">5</div>
+        <div class="rule-info">
+          <strong>Sosyal Medyayı Süreli Kullanın</strong>
+          <p>Instagram, TikTok ve X gibi uygulamalara günlük 45-60 dakika sınır koyun. Kaydırma (doomscrolling) tuzağından kurtulun.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Re-scan Box -->
+    <div class="guide-bottom-box">
+      <div class="bottom-box-text">
+        <h4>Şimdi Kendi Durumunuzu Test Edin!</h4>
+        <p>Alışkanlıklarınızı analiz edip size özel puanınızı ve tavsiyelerinizi ücretsiz öğrenmek için sağdaki QR kodu okutun.</p>
+      </div>
+      <div class="mini-qr">
+        <img src="dijitalsaglik-qr.png" alt="QR Kod">
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="cover-footer">
+      <span>🌿 Dijital Farkındalık ve Yaşam Sağlığı Bilgilendirme Bülteni</span>
+      <span>dijitalsaglik.netlify.app</span>
+    </div>
+  </div>
+
+</body>
+</html>
