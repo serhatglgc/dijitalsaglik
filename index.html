@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#080c14" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Dijital Sağlık" />
+  <title>Dijital Yaşam Risk Değerlendirmesi | Dijital Sağlık Puanı</title>
+  <meta name="description" content="Ekran süresi ve dijital alışkanlıklarınıza göre 10 üzerinden dijital yaşam sağlığınızı ölçün. Ücretsiz, anında sonuç." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Animated background particles -->
+  <div class="bg-particles" id="bgParticles"></div>
+
+  <!-- ========== HERO / INTRO SCREEN ========== -->
+  <section class="screen active" id="screen-intro">
+    <div class="hero-container">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        <span>Bilimsel temelli değerlendirme</span>
+      </div>
+      <div class="hero-icon">🌐</div>
+      <h1>Dijital Yaşam<br /><span class="gradient-text">Risk Değerlendirmesi</span></h1>
+      <p class="hero-subtitle">
+        Günlük dijital alışkanlıklarınızı analiz ederek<br />
+        <strong>10 üzerinden</strong> dijital sağlık puanınızı hesaplayın.
+      </p>
+
+      <div class="stats-row">
+        <div class="stat-item">
+          <span class="stat-number">8</span>
+          <span class="stat-label">Kriter</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">10</span>
+          <span class="stat-label">Üzerinden Puan</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">30s</span>
+          <span class="stat-label">Süre</span>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="startBtn" onclick="goToStep(1)">
+        <span>Değerlendirmeyi Başlat</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <p class="hero-note">Verileriniz cihazınızda kalır, hiçbir yere gönderilmez.</p>
+    </div>
+  </section>
+
+  <!-- ========== QUESTIONS SCREEN ========== -->
+  <section class="screen" id="screen-questions">
+    <div class="questions-container">
+
+      <!-- Progress bar -->
+      <div class="progress-header">
+        <button class="back-btn" id="backBtn" onclick="goBack()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+        <span class="progress-label" id="progressLabel">1/8</span>
+      </div>
+
+      <!-- Question cards (one visible at a time) -->
+      <div class="question-stage" id="questionStage">
+
+        <!-- Q1 -->
+        <div class="q-card" id="q1" data-step="1">
+          <div class="q-emoji">📱</div>
+          <h2 class="q-title">Günlük <span class="highlight">telefon</span> ekran süreniz nedir?</h2>
+          <p class="q-desc">Telefon ayarlarınızdan "Ekran Süresi" bölümünü kontrol edebilirsiniz.</p>
+          <div class="input-group">
+            <input type="number" id="q1-input" class="q-input" placeholder="Örn: 4.5" min="0" max="24" step="0.5" />
+            <span class="input-unit">saat / gün</span>
+          </div>
+          <div class="q-scale-hint">
+            <span class="hint-good">✅ &lt;2 saat ideal</span>
+            <span class="hint-bad">⚠️ &gt;6 saat riskli</span>
+          </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="q-card hidden" id="q2" data-step="2">
+          <div class="q-emoji">💻</div>
+          <h2 class="q-title">Günlük <span class="highlight">bilgisayar</span> ekran süreniz nedir?</h2>
+          <p class="q-desc">İş + kişisel kullanım toplamını girin.</p>
+          <div class="input-group">
+            <input type="number" id="q2-input" class="q-input" placeholder="Örn: 6" min="0" max="16" step="0.5" />
+            <span class="input-unit">saat / gün</span>
+          </div>
+          <div class="q-scale-hint">
+            <span class="hint-good">✅ &lt;4 saat ideal</span>
+            <span class="hint-bad">⚠️ &gt;8 saat riskli</span>
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="q-card hidden" id="q3" data-step="3">
+          <div class="q-emoji">🌙</div>
+          <h2 class="q-title">Uyku öncesi <span class="highlight">telefonda</span> ne kadar vakit geçirirsiniz?</h2>
+          <p class="q-desc">Yatağa girmeden önceki son telefon kullanımı.</p>
+          <div class="input-group">
+            <input type="number" id="q3-input" class="q-input" placeholder="Örn: 30" min="0" max="240" step="5" />
+            <span class="input-unit">dakika</span>
+          </div>
+          <div class="q-scale-hint">
+            <span class="hint-good">✅ &lt;15 dk ideal</span>
+            <span class="hint-bad">⚠️ &gt;60 dk riskli</span>
+          </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="q-card hidden" id="q4" data-step="4">
+          <div class="q-emoji">📲</div>
+          <h2 class="q-title">Günlük <span class="highlight">sosyal medya</span> kullanımınız?</h2>
+          <p class="q-desc">Instagram, TikTok, Twitter, YouTube vb. toplamı.</p>
+          <div class="input-group">
+            <input type="number" id="q4-input" class="q-input" placeholder="Örn: 2.5" min="0" max="16" step="0.5" />
+            <span class="input-unit">saat / gün</span>
+          </div>
+          <div class="q-scale-hint">
+            <span class="hint-good">✅ &lt;1 saat ideal</span>
+            <span class="hint-bad">⚠️ &gt;3 saat riskli</span>
+          </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="q-card hidden" id="q5" data-step="5">
+          <div class="q-emoji">🔔</div>
+          <h2 class="q-title">Günde kaç bildirim alıyorsunuz?</h2>
+          <p class="q-desc">Tahmini bir rakam girebilirsiniz.</p>
+          <div class="choice-grid" id="q5-choices">
+            <button class="choice-btn" data-value="5" onclick="selectChoice('q5', 5, this)">
+              <span class="choice-icon">🔕</span>
+              <span>0–20</span>
+              <span class="choice-sub">Az bildirim</span>
+            </button>
+            <button class="choice-btn" data-value="7" onclick="selectChoice('q5', 7, this)">
+              <span class="choice-icon">🔔</span>
+              <span>20–60</span>
+              <span class="choice-sub">Orta</span>
+            </button>
+            <button class="choice-btn" data-value="4" onclick="selectChoice('q5', 4, this)">
+              <span class="choice-icon">📳</span>
+              <span>60–150</span>
+              <span class="choice-sub">Yüksek</span>
+            </button>
+            <button class="choice-btn" data-value="1" onclick="selectChoice('q5', 1, this)">
+              <span class="choice-icon">🚨</span>
+              <span>150+</span>
+              <span class="choice-sub">Çok yüksek</span>
+            </button>
+          </div>
+          <input type="hidden" id="q5-input" />
+        </div>
+
+        <!-- Q6 -->
+        <div class="q-card hidden" id="q6" data-step="6">
+          <div class="q-emoji">💤</div>
+          <h2 class="q-title">Günde ortalama kaç saat <span class="highlight">uyuyorsunuz</span>?</h2>
+          <p class="q-desc">Uyku kalitesi dijital sağlığın temel göstergesidir.</p>
+          <div class="input-group">
+            <input type="number" id="q6-input" class="q-input" placeholder="Örn: 7" min="2" max="12" step="0.5" />
+            <span class="input-unit">saat / gün</span>
+          </div>
+          <div class="q-scale-hint">
+            <span class="hint-good">✅ 7–9 saat ideal</span>
+            <span class="hint-bad">⚠️ &lt;6 saat riskli</span>
+          </div>
+        </div>
+
+        <!-- Q7 -->
+        <div class="q-card hidden" id="q7" data-step="7">
+          <div class="q-emoji">🚶</div>
+          <h2 class="q-title">Telefonsuz <span class="highlight">mola</span> verebiliyor musunuz?</h2>
+          <p class="q-desc">Gün içinde telefon kullanmadan geçirdiğiniz en uzun süre.</p>
+          <div class="choice-grid" id="q7-choices">
+            <button class="choice-btn" data-value="9" onclick="selectChoice('q7', 9, this)">
+              <span class="choice-icon">🏆</span>
+              <span>4+ saat</span>
+              <span class="choice-sub">Çok iyi</span>
+            </button>
+            <button class="choice-btn" data-value="7" onclick="selectChoice('q7', 7, this)">
+              <span class="choice-icon">😊</span>
+              <span>2–4 saat</span>
+              <span class="choice-sub">İyi</span>
+            </button>
+            <button class="choice-btn" data-value="4" onclick="selectChoice('q7', 4, this)">
+              <span class="choice-icon">😐</span>
+              <span>1–2 saat</span>
+              <span class="choice-sub">Orta</span>
+            </button>
+            <button class="choice-btn" data-value="1" onclick="selectChoice('q7', 1, this)">
+              <span class="choice-icon">😟</span>
+              <span>&lt;1 saat</span>
+              <span class="choice-sub">Bağımlılık riski</span>
+            </button>
+          </div>
+          <input type="hidden" id="q7-input" />
+        </div>
+
+        <!-- Q8 -->
+        <div class="q-card hidden" id="q8" data-step="8">
+          <div class="q-emoji">🧘</div>
+          <h2 class="q-title">Dijital detoks yapıyor musunuz?</h2>
+          <p class="q-desc">Hafta sonu veya belirli saatlerde kasıtlı olarak ekrandan uzaklaşma.</p>
+          <div class="choice-grid" id="q8-choices">
+            <button class="choice-btn" data-value="10" onclick="selectChoice('q8', 10, this)">
+              <span class="choice-icon">🌿</span>
+              <span>Her hafta</span>
+              <span class="choice-sub">Düzenli detoks</span>
+            </button>
+            <button class="choice-btn" data-value="7" onclick="selectChoice('q8', 7, this)">
+              <span class="choice-icon">🌱</span>
+              <span>Bazen</span>
+              <span class="choice-sub">Ayda birkaç kez</span>
+            </button>
+            <button class="choice-btn" data-value="4" onclick="selectChoice('q8', 4, this)">
+              <span class="choice-icon">🌾</span>
+              <span>Nadiren</span>
+              <span class="choice-sub">Çok az</span>
+            </button>
+            <button class="choice-btn" data-value="1" onclick="selectChoice('q8', 1, this)">
+              <span class="choice-icon">🏜️</span>
+              <span>Hiç</span>
+              <span class="choice-sub">Yapamıyorum</span>
+            </button>
+          </div>
+          <input type="hidden" id="q8-input" />
+        </div>
+
+      </div><!-- /question-stage -->
+
+      <div class="q-nav">
+        <button class="btn-primary" id="nextBtn" onclick="nextQuestion()">
+          <span id="nextBtnText">Devam Et</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+        <p class="q-nav-hint" id="validationMsg"></p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== RESULT SCREEN ========== -->
+  <section class="screen" id="screen-result">
+    <div class="result-container">
+
+      <div class="result-header">
+        <p class="result-subtitle">Dijital Sağlık Raporunuz</p>
+        <h2 class="result-title">Sonuçlarınız Hazır!</h2>
+      </div>
+
+      <!-- Score Ring -->
+      <div class="score-ring-wrap">
+        <svg class="score-ring" viewBox="0 0 200 200" width="200" height="200">
+          <circle class="ring-bg" cx="100" cy="100" r="80" />
+          <circle class="ring-fill" id="ringFill" cx="100" cy="100" r="80"
+            stroke-dasharray="502.65"
+            stroke-dashoffset="502.65"
+            transform="rotate(-90 100 100)" />
+        </svg>
+        <div class="score-center">
+          <span class="score-number" id="scoreNumber">0</span>
+          <span class="score-denom">/10</span>
+          <span class="score-label-text" id="scoreLabelText">Hesaplanıyor…</span>
+        </div>
+      </div>
+
+      <!-- Risk Badge -->
+      <div class="risk-badge" id="riskBadge"></div>
+
+      <!-- Category breakdown -->
+      <div class="breakdown-section">
+        <h3 class="breakdown-title">Kategori Analizi</h3>
+        <div class="breakdown-grid" id="breakdownGrid"></div>
+      </div>
+
+      <!-- Personal tips -->
+      <div class="tips-section">
+        <h3 class="tips-title">💡 Kişisel Öneriler</h3>
+        <ul class="tips-list" id="tipsList"></ul>
+      </div>
+
+      <!-- Sharing / actions -->
+      <div class="result-actions">
+        <button class="btn-share" id="shareBtn" onclick="shareResult()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Sonucu Paylaş
+        </button>
+        <button class="btn-restart" onclick="restart()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          Tekrar Dene
+        </button>
+      </div>
+
+      <p class="result-disclaimer">Bu değerlendirme bilgilendirme amaçlıdır. Tıbbi tanı değildir.</p>
+    </div>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
